@@ -5,7 +5,8 @@ import { useState } from "react";
 import uuid from "react-uuid";
 
 function App() {
-  const [notes, setNote] = useState([]);
+  const [notes, setNotes] = useState([]);
+  const [activeNote, setActiveNote] = useState(false);
 
   const onAddNote = () => {
     const newNote = {
@@ -14,19 +15,27 @@ function App() {
       content: "content",
       modifiedDate: Date.now(),
     };
-    setNote([...notes, newNote]);
-    console.log(notes.id);
+    setNotes([...notes, newNote]);
+    console.log(notes);
     // スプレッド構文...hoge,newHoge　今までの要素に(...hoge)新しく加える(newHoge)
+  };
+
+  const onDeleteNote = (id) => {
+    const filterNotes = notes.filter((note) => note.id !== id);
+    // idに関しては呼び出し側で渡してここで受け取っている。
+    setNotes(filterNotes);
   };
 
   return (
     <div className="App">
       <Sidebar
         onAddNote={onAddNote}
+        onDeleteNote={onDeleteNote}
         notes={notes}
-        // setNote={setNote}
+        activeNote={activeNote}
+        setActiveNote={setActiveNote}
       />
-      <Main />
+      <Main activeNote={activeNote} />
     </div>
   );
 }
